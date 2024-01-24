@@ -1,0 +1,28 @@
+---
+- name: "Defining the Quadlet Service"
+  ansible.builtin.set_fact:
+    __service_name: gogs-psql
+
+- name: "Defining the Quadlet Name"
+  ansible.builtin.set_fact:
+    __quadlet_name: "{{ __service_name | capitalize }}"
+
+- name: "Assuring {{ __quadlet_name }} Volumes Exists"
+  ansible.builtin.file:
+    path: "{{ vol.path }}"
+    mode: "{{ vol.mode | default('0755') }}"
+    state: directory
+  loop: "{{ gogs_quadlet_psql_volumes }}"
+  loop_control:
+    loop_var: vol
+
+- name: "Installing {{ __quadlet_name }} Quadlet Template"
+  ansible.builtin.template:
+    src: psql-quadlet.container.j2
+    dest: "{{ __gogs_psql_quadlet_container }}"
+  notify:
+    - daemon-reload
+    - quadlet-restart
+
+- name: "Triggering Handlers"
+  ansible.builtin.meta: flush_handlers

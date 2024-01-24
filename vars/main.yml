@@ -1,0 +1,11 @@
+---
+# define the systemD directory for quadlet files
+__quadlet_path: "/usr/share/containers/systemd/"
+
+# define the quadlet container file
+__gogs_quadlet_container: "{{ __quadlet_path }}\
+                                   gogs.container"
+
+# define the quadlet container file
+__gogs_psql_quadlet_container: "{{ __quadlet_path }}/\
+                                         gogs-psql.container"

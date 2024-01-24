@@ -1,0 +1,26 @@
+# Gogs Quadlet Container
+[Unit]
+Description=Gogs Quadlet Application
+Requires=gogs-psql.service
+After=gogs-psql.service
+
+[Container]
+Image={{ gogs_quadlet.image }}:{{ gogs_quadlet.tag }}
+ContainerName=gogs
+#IP=192.168.12.3
+LogDriver=journald
+#Pod=gogs-quadlet
+Network=host
+{% for key, value in gogs_quadlet_psql_env.items() %}
+Environment={{ key }}={{ value }}
+{% endfor %}
+{% for vol in gogs_quadlet_volumes %}
+Volume={{ vol.path }}:{{ vol.dest }}:Z
+{% endfor %}
+{% for port in gogs_quadlet_ports %}
+PublishPort={{ port.hostPort }}:{{ port.containerPort }}/{{ port.proto }}
+{% endfor %}
+
+[Install]
+# Start by default on boot
+WantedBy=network.target multi-user.target default.target

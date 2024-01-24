@@ -1,0 +1,25 @@
+# PostgreSQL Used by Gogs Quadlet Container
+[Unit]
+Description=PostgreSQL for Gogs Application
+After=network.target
+
+[Container]
+Image={{ gogs_quadlet_psql.image }}:{{ gogs_quadlet_psql.tag }}
+ContainerName=gogs-psql
+#IP=192.168.12.2
+LogDriver=journald
+#Pod=gogs-quadlet
+Network=host
+{% for key, value in gogs_quadlet_psql_env.items() %}
+Environment={{ key }}={{ value }}
+{% endfor %}
+{% for vol in gogs_quadlet_psql_volumes %}
+Volume={{ vol.path }}:{{ vol.dest }}:Z
+{% endfor %}
+{% for port in gogs_quadlet_psql_ports %}
+PublishPort={{ port.hostPort }}:{{ port.containerPort }}/{{ port.proto }}
+{% endfor %}
+
+[Install]
+# Start by default on boot
+WantedBy=network.target multi-user.target default.target

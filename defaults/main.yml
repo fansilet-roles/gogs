@@ -1,0 +1,43 @@
+---
+# defaults file for gogs-quadlet
+gogs_quadlet:
+  image: ghcr.io/mrbrandao/gogs
+  tag: v0.1.0
+
+gogs_quadlet_volumes:
+  - name: data
+    path: /srv/gogs/data
+    dest: /data
+  - name: bkp
+    path: /srv/gogs/backup
+    dest: /backup
+
+gogs_quadlet_ports:
+  - hostPort: '2222'
+    containerPort: '22'
+    proto: tcp
+  - hostPort: '3000'
+    containerPort: '3000'
+    proto: tcp
+
+gogs_quadlet_psql:
+  image: ghcr.io/mrbrandao/gogs-psql
+  tag: v0.1.0
+
+gogs_quadlet_psql_volumes:
+  - name: psql-data
+    path: /srv/gogs/psql-data
+    dest: /var/lib/postgresql/data
+
+gogs_quadlet_psql_ports:
+  - hostPort: 5432
+    containerPort: 5432
+    proto: tcp
+
+gogs_quadlet_psql_env:
+  TZ: "America/Sao_Paulo"
+  POSTGRES_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') |
+    default('admin', true) }}"
+  GOGS_PASSWORD: "{{ lookup('env', 'GOGS_PASS') | default('gogs', true) }}"
+  GOGS_USER: "{{ lookup('env', 'GOGS_USER') | default('gogs', true) }}"
+  POSTGRES_DB: "{{ lookup('env', 'POSTGRES_DB') | default('gogs', true) }}"

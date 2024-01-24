@@ -1,0 +1,11 @@
+---
+- name: Reload SystemD Daemon
+  ansible.builtin.shell:
+    cmd: systemctl daemon-reload
+  listen: daemon-reload
+
+- name: Restarting quadlet container
+  ansible.builtin.service:
+    name: "{{ __service_name }}"
+    state: restarted
+  listen: quadlet-restart

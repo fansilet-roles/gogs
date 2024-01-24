@@ -1,0 +1,7 @@
+---
+# tasks file for gogs-quadlet
+- name: "Including Postgresql Setup"
+  ansible.builtin.include_tasks: setup_psql.yml
+
+- name: "Including Gogs Setup"
+  ansible.builtin.include_tasks: gogs_setup.yml
