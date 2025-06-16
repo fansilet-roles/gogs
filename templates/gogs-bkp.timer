@@ -1,0 +1,9 @@
+[Unit]
+Description=Create Gogs Backups
+
+[Timer]
+OnCalendar=Wed *-*-* 03:00:00
+Unit={{ __gogs_bkp_unit }}
+
+[Install]
+WantedBy=timers.target

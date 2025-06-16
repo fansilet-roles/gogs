@@ -7,24 +7,31 @@
   ansible.builtin.set_fact:
     __quadlet_name: "{{ __service_name | capitalize }}"
 
-- name: "Assuring {{ __quadlet_name }} Volumes Exists"
+- name: "Assuring Volumes Exists to {{ __quadlet_name }}"
   ansible.builtin.file:
     path: "{{ vol.path }}"
     mode: "{{ vol.mode | default('0755') }}"
     state: directory
+    owner: "{{ vol.owner }}"
+  when: vol.dir | bool
   loop: "{{ gogs_quadlet_volumes }}"
   loop_control:
     loop_var: vol
 
-- name: "Installing {{ __quadlet_name }} Kube Pod Template"
+- name: "Installing Kube Pod Template to {{ __quadlet_name }}"
   ansible.builtin.template:
     src: gogs-pod.j2
     dest: "{{ __gogs_kube_pod }}"
+    mode: "0644"
+  notify:
+    - daemon-reload
+    - quadlet-restart
 
-- name: "Installing {{ __quadlet_name }} Quadlet Kube Template"
+- name: "Installing Quadlet Kube Template to {{ __quadlet_name }}"
   ansible.builtin.template:
     src: gogs-quadlet.kube.j2
     dest: "{{ __gogs_kube_quadlet }}"
+    mode: "0644"
   notify:
     - daemon-reload
     - quadlet-restart

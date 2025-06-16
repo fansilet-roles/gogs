@@ -1,0 +1,9 @@
+[Unit]
+Description=Create a Gogs Backup for the Container Volume and Gogs Data
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "\
+  {{ __gogs_backup_script }} backup gogs-gogs && \
+  {{ __gogs_backup_script }} volbkp gogs-bkp /srv/gogs/volbkp/"
+

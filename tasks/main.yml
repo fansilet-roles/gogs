@@ -5,3 +5,6 @@
 
 - name: "Including Gogs Setup"
   ansible.builtin.include_tasks: gogs_setup.yml
+
+- name: "Including Gogs Backup Timer"
+  ansible.builtin.include_tasks: gogs_timer_bkp.yml

@@ -12,13 +12,35 @@ gogs_quadlet:
   tag: v0.1.1
   name: gogs
 
+# gogs_quadlet_volumes defines the gogs volumes
+# `name` - defines the volume name
+# `path` - the path to mount the volume (when using dir: true)
+# `dest` - the bind path inside the container
+# `dir`  - uses staticDir if true, if false will use container volumes. (paths
+# will only be created when using `dir` as true
+# `owner` - when using staticDir or `dir: true` defines the owner to the `path`
+# when using `dir: false` it will by default use container volumes in kubeplay
+# this will be persistentVolumeClaims, while when using `dir: true` this will be
+# mapped as `hostPath type directory`
 gogs_quadlet_volumes:
+  # gogs data directory
   - name: gogs-data
     path: /srv/gogs/data
     dest: /data
+    dir: false
+    owner: 1000
+  # the gogs data backup inside container
   - name: gogs-bkp
     path: /srv/gogs/backup
     dest: /backup
+    dir: false
+    owner: 1000
+  # the volume backup directory in the host
+  - name: gogs-volbkp
+    path: /srv/gogs/volbkp
+    dest: /volbkp
+    dir: true
+    owner: 1000
 
 gogs_quadlet_ports:
   - hostPort: '2222'
@@ -37,6 +59,7 @@ gogs_quadlet_psql_volumes:
   - name: psql-data
     path: /srv/gogs/psql-data
     dest: /var/lib/postgresql/data
+    dir: false
 
 gogs_quadlet_psql_ports:
   - hostPort: 5432

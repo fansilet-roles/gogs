@@ -1,0 +1,30 @@
+---
+# - name: "Enable timers to run without login"
+#   ansible.builtin.shell:
+#     cmd: loginctl enable-linger "{{ ansible_user_id }}"
+
+- name: "Installing Gogs Backup SystemD Unit"
+  ansible.builtin.template:
+    src: "gogs-bkp.service"
+    dest: "{{ __gogs_bkp_install }}"
+    mode: "0644"
+
+- name: "Installing Gogs Backup SystemD Timer"
+  ansible.builtin.template:
+    src: "gogs-bkp.timer"
+    dest: "{{ __gogs_bkp_timer }}"
+    mode: "0644"
+
+- name: "Installing Gogs Backup Script"
+  ansible.builtin.copy:
+    src: gogs-bkp.sh
+    dest: "{{ __gogs_backup_script }}"
+    mode: "0755"
+
+- name: "Enabling Gogs Backup Timer"
+  ansible.builtin.systemd_service:
+    name: gogs-bkp.timer
+    state: started
+    enabled: true
+    daemon_reload: true
+    daemon_reexec: true

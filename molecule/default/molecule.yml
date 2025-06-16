@@ -16,7 +16,7 @@ platforms:
   # 1. install kerne-devel `dnf -y install kernel-devel.x86_64`
   # 2. modprobe iptables_nat
   # 3. only after this do molecule converge
-  # by default this converge uses option2 
+  # by default this converge uses option2
   # ps: capabilities are not necessary, it's listed in case you need to
   # enable it for troubleshooting the pod network
   - name: pinp
@@ -44,7 +44,7 @@ platforms:
       - 0.0.0.0:2222:2222/tcp
       - 0.0.0.0:3000:3000/tcp
     # env:
-    #   CONTAINER_HOST: "unix:///var/run/podman/podman.sock" 
+    #   CONTAINER_HOST: "unix:///var/run/podman/podman.sock"
 provisioner:
   name: ansible
 verifier:

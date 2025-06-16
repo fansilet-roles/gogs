@@ -2,6 +2,9 @@
 # define the systemD directory for quadlet files
 __quadlet_path: "/usr/share/containers/systemd/"
 
+# define the systemD directory for unit files and timers
+__systemd_path: "/etc/systemd/system/"
+
 # define the quadlet container file
 __gogs_quadlet_container: "{{ __quadlet_path }}\
                                    gogs.container"
@@ -14,3 +17,15 @@ __gogs_kube_quadlet: "{{ __quadlet_path }}/gogs.kube"
 
 # define the quadlet kube play file
 __gogs_kube_pod: "{{ __quadlet_path }}/gogs-pod.yml"
+
+# define the gogs backup unit file
+__gogs_bkp_unit: gogs-bkp.service
+
+# define the gogs backup unit file install path
+__gogs_bkp_install: "{{ __systemd_path }}{{ __gogs_bkp_unit }}"
+
+# define the gogs backup timer unit file
+__gogs_bkp_timer: "{{ __systemd_path }}/gogs-bkp.timer"
+
+# define the backup script install path
+__gogs_backup_script: "/usr/local/bin/gogs-bkp.sh"

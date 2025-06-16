@@ -7,11 +7,12 @@
   ansible.builtin.set_fact:
     __quadlet_name: "{{ __service_name | capitalize }}"
 
-- name: "Assuring {{ __quadlet_name }} Volumes Exists"
+- name: "Assuring Volumes Exists for {{ __quadlet_name }}"
   ansible.builtin.file:
     path: "{{ vol.path }}"
     mode: "{{ vol.mode | default('0755') }}"
     state: directory
+  when: vol.dir | bool
   loop: "{{ gogs_quadlet_psql_volumes }}"
   loop_control:
     loop_var: vol

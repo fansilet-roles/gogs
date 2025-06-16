@@ -1,0 +1,66 @@
+#jinja2: trim_blocks: False, lstrip_blocks: False, keep_trailing_newline: True
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ gogs_pod.name }}
+  annotations:
+    {% for key, value in gogs_pod.annotations.items() -%}
+      {{ key }}: {{ value }}
+    {% endfor %}
+  labels:
+    {% for key, value in gogs_pod.labels.items() -%}
+      {{ key }}: {{ value }}
+    {% endfor %}
+
+spec:
+  containers:
+  - image: {{ gogs_quadlet_psql.image }}:{{ gogs_quadlet_psql.tag }}
+    name: {{ gogs_quadlet_psql.name }}
+    env:
+      {% for key, value in gogs_quadlet_psql_env.items() -%}
+      - name: {{ key }}
+        value: {{ value }}
+      {% endfor %}
+
+    volumeMounts:
+      {% for vol in gogs_quadlet_psql_volumes -%}
+      - mountPath: {{ vol.dest }}
+        {% if vol.dir -%}
+        name: {{ vol.name }}
+        {% else -%}
+        name: {{ vol.name }}-pvc
+        {% endif %}
+      {% endfor %}
+
+  - image: {{ gogs_quadlet.image }}:{{ gogs_quadlet.tag }}
+    name: {{ gogs_quadlet.name }}
+    ports:
+      {% for port in gogs_quadlet_ports -%}
+      - containerPort: {{ port.containerPort }}
+        hostPort: {{ port.hostPort }}
+      {% endfor %}
+
+    volumeMounts:
+      {% for vol in gogs_quadlet_volumes -%}
+        - mountPath: {{ vol.dest }}
+        {% if vol.dir -%}
+        name: {{ vol.name }}
+        {% else -%}
+        name: {{ vol.name }}-pvc
+        {%- endif %}
+      {% endfor %}
+
+  volumes:
+  {% for vol in gogs_quadlet_volumes + gogs_quadlet_psql_volumes -%}
+  {% if vol.dir %}
+    - hostPath:
+        path: {{ vol.path }}
+        type: Directory
+      name: {{ vol.name }}
+  {% else %}
+    - name: {{ vol.name }}-pvc
+      persistentVolumeClaim:
+        claimName: {{ vol.name }}
+  {% endif -%}
+  {% endfor -%}
