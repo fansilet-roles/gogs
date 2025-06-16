@@ -15,14 +15,3 @@
   loop: "{{ gogs_quadlet_psql_volumes }}"
   loop_control:
     loop_var: vol
-
-- name: "Installing {{ __quadlet_name }} Quadlet Template"
-  ansible.builtin.template:
-    src: psql-quadlet.container.j2
-    dest: "{{ __gogs_psql_quadlet_container }}"
-  notify:
-    - daemon-reload
-    - quadlet-restart
-
-- name: "Triggering Handlers"
-  ansible.builtin.meta: flush_handlers

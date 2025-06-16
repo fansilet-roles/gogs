@@ -9,8 +9,8 @@ Image={{ gogs_quadlet.image }}:{{ gogs_quadlet.tag }}
 ContainerName=gogs
 #IP=192.168.12.3
 LogDriver=journald
-#Pod=gogs-quadlet
-Network=host
+Pod=gogs-quadlet
+#Network=host
 {% for key, value in gogs_quadlet_psql_env.items() %}
 Environment={{ key }}={{ value }}
 {% endfor %}

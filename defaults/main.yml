@@ -1,14 +1,22 @@
 ---
 # defaults file for gogs-quadlet
+gogs_pod:
+  name: gogs
+  annotations:
+    project: fansilet-gogs
+  labels:
+    app: gogs
+
 gogs_quadlet:
   image: ghcr.io/mrbrandao/gogs
-  tag: v0.1.0
+  tag: v0.1.1
+  name: gogs
 
 gogs_quadlet_volumes:
-  - name: data
+  - name: gogs-data
     path: /srv/gogs/data
     dest: /data
-  - name: bkp
+  - name: gogs-bkp
     path: /srv/gogs/backup
     dest: /backup
 
@@ -22,7 +30,8 @@ gogs_quadlet_ports:
 
 gogs_quadlet_psql:
   image: ghcr.io/mrbrandao/gogs-psql
-  tag: v0.1.0
+  tag: v0.1.1
+  name: psql
 
 gogs_quadlet_psql_volumes:
   - name: psql-data
