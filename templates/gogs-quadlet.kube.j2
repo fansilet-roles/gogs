@@ -1,0 +1,11 @@
+# Gogs Quadlet Kube
+[Unit]
+Description=Gogs Quadlet Application
+
+[Kube]
+Yaml={{ __gogs_kube_pod }}
+LogDriver=journald
+
+[Install]
+# Start by default on boot
+WantedBy=network.target multi-user.target default.target

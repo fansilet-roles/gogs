@@ -9,3 +9,8 @@ __gogs_quadlet_container: "{{ __quadlet_path }}\
 # define the quadlet container file
 __gogs_psql_quadlet_container: "{{ __quadlet_path }}/\
                                          gogs-psql.container"
+# define the kube quadlet file
+__gogs_kube_quadlet: "{{ __quadlet_path }}/gogs.kube"
+
+# define the quadlet kube play file
+__gogs_kube_pod: "{{ __quadlet_path }}/gogs-pod.yml"

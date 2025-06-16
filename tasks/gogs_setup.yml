@@ -16,10 +16,15 @@
   loop_control:
     loop_var: vol
 
-- name: "Installing {{ __quadlet_name }} Quadlet Template"
+- name: "Installing {{ __quadlet_name }} Kube Pod Template"
   ansible.builtin.template:
-    src: gogs-quadlet.container.j2
-    dest: "{{ __gogs_quadlet_container }}"
+    src: gogs-pod.j2
+    dest: "{{ __gogs_kube_pod }}"
+
+- name: "Installing {{ __quadlet_name }} Quadlet Kube Template"
+  ansible.builtin.template:
+    src: gogs-quadlet.kube.j2
+    dest: "{{ __gogs_kube_quadlet }}"
   notify:
     - daemon-reload
     - quadlet-restart
