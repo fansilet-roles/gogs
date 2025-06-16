@@ -5,14 +5,33 @@ driver:
   name: podman
 platforms:
   # pinp - podman rootfull in podman rootless
+  # when using kube play there's two ways to support it on pinp
+  # Option 1 - sharing socket:
+  # 1. systemctl --user enable --now podman.socket
+  # 2. loginctl enable-linger $USER
+  # 3. uncomment the podman.sock volume
+  # 4. uncomment the env container_host variable
+  # 5. only after this do molecule converge
+  # Option 2 - installing kernel-devel and probing iptables_nat
+  # 1. install kerne-devel `dnf -y install kernel-devel.x86_64`
+  # 2. modprobe iptables_nat
+  # 3. only after this do molecule converge
+  # by default this converge uses option2 
+  # ps: capabilities are not necessary, it's listed in case you need to
+  # enable it for troubleshooting the pod network
   - name: pinp
     image: quay.io/podman/stable
     pre_build_image: true
     command: /sbin/init
+    # capabilities:
+    #   - NET_ADMIN
+    #   - NET_RAW
+    #   - SYS_ADMIN
     tmpfs:
       - /run
       - /tmp
     volumes:
+      # - /run/user/1000/podman/podman.sock:/var/run/podman/podman.sock:Z
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - ~/dev:/tmp/test
     devices:
@@ -21,6 +40,11 @@ platforms:
       - unmask=ALL
       - label=disable
     privileged: true
+    published_ports:
+      - 0.0.0.0:2222:2222/tcp
+      - 0.0.0.0:3000:3000/tcp
+    # env:
+    #   CONTAINER_HOST: "unix:///var/run/podman/podman.sock" 
 provisioner:
   name: ansible
 verifier:
