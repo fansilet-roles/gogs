@@ -3,6 +3,7 @@ dependency:
   name: galaxy
 driver:
   name: podman
+  become: true
 platforms:
   # pinp - podman rootfull in podman rootless
   # when using kube play there's two ways to support it on pinp
@@ -47,5 +48,9 @@ platforms:
     #   CONTAINER_HOST: "unix:///var/run/podman/podman.sock"
 provisioner:
   name: ansible
+  playbooks:
+    prepare: prepare.yml
+  env:
+    ANSIBLE_VAULT_PASSWORD_FILE: ../../secrets/.vault
 verifier:
   name: ansible

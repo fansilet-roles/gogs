@@ -117,11 +117,14 @@ Developing and Testing
 
 This role was developed using [ansible
 molecule](https://ansible.readthedocs.io/projects/molecule/).
-The use of molecule is optional but recommended.  
-  
-* Testing:  
-Unit tests for checking code regression are available in the [`tests` directory](tests/).
-use the `verify` or `test` commands, e.g:  
+The use of molecule is optional but recommended.
+
+> **Note**
+> Testing this role with Molecule requires creating local secrets for privilege escalation during the `prepare` phase. Please read the [secret management instructions](secrets/README.md) before running `molecule` commands.
+
+- Testing:  
+  Unit tests for checking code regression are available in the [`tests` directory](tests/).
+  use the `verify` or `test` commands, e.g:
 
 ```bash
 molecule test

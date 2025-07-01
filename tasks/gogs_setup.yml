@@ -36,5 +36,11 @@
     - daemon-reload
     - quadlet-restart
 
+- name: "Forcing Restart and Reload"
+  ansible.builtin.command: echo 'Restarting'
+  notify:
+    - daemon-reload
+    - quadlet-restart
+
 - name: "Triggering Handlers"
   ansible.builtin.meta: flush_handlers

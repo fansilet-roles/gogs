@@ -1,0 +1,21 @@
+---
+- name: Gogs Prepare
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../../secrets/secret.yml
+  vars:
+    ansible_become_pass: "{{ vault_pass | default(omit) }}"
+
+  tasks:
+    - name: "Installing Dependecies on the Host"
+      ansible.builtin.dnf5:
+        name:
+          - kernel-devel
+
+    - name: Inserting Testing Secrets
+      community.general.modprobe:
+        name: iptable_nat
+        state: present
